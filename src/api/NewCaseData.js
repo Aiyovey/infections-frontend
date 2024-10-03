@@ -6,3 +6,11 @@ export function newCaseData() {
         method: 'get',
     })
 }
+
+// Ä£Äâ½á¹û
+export function infectionRes() {
+    return request({
+      url: '/newCase/infection-res',
+      method: 'get',
+    })
+  }

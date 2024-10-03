@@ -64,27 +64,29 @@
           <el-button @click="handleReset" style="margin-right: 3vw;">重置</el-button>
         </div>
         <div id="processContainer">
-          <processCompo />
+          <dv-border-box-11 title="传染趋势" id="compare">
+            <processCompo />
+          </dv-border-box-11>
         </div>
       </el-col>
 
       <el-col :span="6" id="colRight">
         <dv-border-box-11 title="模拟结果" id="resultContainer">
           <el-row id="statisticRow">
-            <el-col :span="12">
-              <el-statistic title="感染人数" :value="11111" :value-style="{ color: 'rgb(236,197,0)', fontSize: '36px' }">
+            <el-col :span="24">
+              <el-statistic title="感染人数" :value=infectionNum :value-style="{ color: 'rgb(236,197,0)', fontSize: '36px' }">
                 <template #suffix>
                   <span style="color: rgb(236,197,0); font-size: small;">人</span>
                 </template>
               </el-statistic>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-statistic title="感染速率" :value="11111" :value-style="{ color: 'rgb(236,197,0)', fontSize: '36px' }">
                 <template #suffix>
                   <span style="color: rgb(236,197,0);">人/天</span>
                 </template>
               </el-statistic>
-            </el-col>
+            </el-col> -->
           </el-row>
 
           <dv-decoration-2 />
@@ -115,6 +117,7 @@ import analysisCompo1 from '@/components/analysisCompo1.vue';
 import analysisCompo2 from '@/components/analysisCompo2.vue';
 
 import { listParameters } from "@/api/parameters";
+import { infectionRes } from '@/api/NewCaseData';
 
 export default {
   data() {
@@ -131,7 +134,8 @@ export default {
       stepParams: {
         startStep: null,
         endStep: null
-      }
+      },
+      infectionNum: 0
     };
   },
   components: {
@@ -146,6 +150,7 @@ export default {
   },
   mounted() {
     this.getPara()
+    this.getInfectionRes()
   },
   methods: {
     handleStart() {
@@ -170,6 +175,13 @@ export default {
       })
     },
 
+    getInfectionRes() {
+      infectionRes().then(response => {
+        const infectionRes = response.data.data
+        this.infectionNum = infectionRes["infectionNum"]
+        console.log(this.infectionRes)
+      })
+    }
   },
 };
 </script>

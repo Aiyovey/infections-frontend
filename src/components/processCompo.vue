@@ -20,45 +20,22 @@ export default {
   },
   methods: {
 
-    newCase() {
-      return newCaseData().then(response => {
-        // const data = response.data.data
-        this.caseData = response.data.data.caseData
-        this.xLabel = response.data.data.xlabel
-        console.log(this.xLabel)
-        this.drawChart()
-      })
+    getSimulationResult() {
+      console.log(this.caseData.length);
+      return this.caseData.length
+    },
+
+    async newCase() {
+      const response=await newCaseData();
+      // const data = response.data.data
+      this.caseData=response.data.data.caseData;
+      this.xLabel=response.data.data.xlabel;
+      console.log(this.xLabel);
+      this.drawChart();
     },
 
     drawChart() {
-      // const steps = this.caseData.map(item => item.step)
-      // // console.log('step:'+steps)
-      // const values = [];
-      // for (let i=0; i<steps.length; i++) {
-      //   if(i===0) {
-      //     values[i] = 0;
-      //   } else {
-      //     values[i] = values[i-1]+1;
-      //   }
-      // }
-      // const dataPoints = steps.map((x, index) => ({
-      //   x: x,
-      //   y: values[index]
-      // }));
-      // console.log(dataPoints)
       var myChart = this.$echarts.init(document.getElementById("process"))
-      // console.log('step:'+steps)
-      // 假设 data 为时间戳数组
-      // const data = [
-      //   0, 28800, 57600, 86400, 115200, 144000, 172800, 201600, 230400, 259200, 288000
-      // ];
-
-      // const formatTime = (timestamp) => {
-      //   // 将时间戳转换为日期格式的字符串
-      //   const date = new Date(timestamp * 1000); // 时间戳转换为毫秒
-      //   return `${date.getUTCMonth() + 1}月 ${date.getUTCDate()}日`; // 格式化为 "月 日"
-      // };
-      // console.log(values)
       // 指定图表的配置项和数据
       const xLabel = this.xLabel
       console.log(xLabel.map(item => item.key))
@@ -84,7 +61,8 @@ export default {
           }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          name: '感染人数'    
         },
         series: [
           {
