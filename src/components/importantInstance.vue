@@ -6,6 +6,7 @@
 <script>
 import mapData from "@/data/yuegezhuang.json"
 import mapStyle from "@/data/mapStyle.json"
+import tanwei from "@/data/tanwei.json"
 // import humanData from "@/data/humanData.json"
 
 import { listAgents, getMaxStep } from "@/api/agent";
@@ -18,6 +19,7 @@ export default {
             timer: null,
             allData: [],
             nowData: [],
+            initPloygon: false,
             startStep: null,
             endStep: null,
             maxStep: null,
@@ -128,6 +130,8 @@ export default {
                     center: [116.28929058577101, 39.88500059256146],
                     // center: [116.2771171, 39.87783755],
                     zoom: 200,
+                    minZoom: 10,
+                    maxZoom: 20,
                     roam: true,
                     mapStyle: {
                         styleJson: mapStyle
@@ -162,21 +166,38 @@ export default {
             }
             // 使用刚指定的配置项和数据显示图表。
             option && myChart.setOption(option);
-            var map = myChart.getModel().getComponent('bmap').getBMap();
-            //添加geojson
-            mapData.features.forEach(feature => {
-                var pointArray = []
-                feature.geometry.coordinates[0].forEach(item => {
-                    pointArray.push(new window.BMap.Point(item[0], item[1]));
-                })
-                var ply = new window.BMap.Polygon()
-                ply.setPath(pointArray)
-                ply.setStrokeWeight(1.5)
-                ply.setStrokeColor("green")
-                ply.setFillColor("#cec5a5")
+            if (!this.initPloygon) {
+                var map = myChart.getModel().getComponent('bmap').getBMap();
+                //添加geojson
+                mapData.features.forEach(feature => {
+                    var pointArray = []
+                    feature.geometry.coordinates[0].forEach(item => {
+                        pointArray.push(new window.BMap.Point(item[0], item[1]));
+                    })
+                    var ply = new window.BMap.Polygon()
+                    ply.setPath(pointArray)
+                    ply.setStrokeWeight(1.5)
+                    ply.setStrokeColor("green")
+                    ply.setFillColor("#cec5a5")
 
-                map.addOverlay(ply)
-            });
+                    map.addOverlay(ply)
+                });
+                tanwei.features.forEach(feature => {
+                    var pointArray = []
+                    feature.geometry.coordinates[0].forEach(item => {
+                        pointArray.push(new window.BMap.Point(item[0], item[1]));
+                    })
+                    var ply = new window.BMap.Polygon()
+                    ply.setPath(pointArray)
+                    ply.setStrokeWeight(1.5)
+                    ply.setStrokeColor("green")
+                    ply.setFillColor("#cec5a5")
+
+                    map.addOverlay(ply)
+                });
+
+                this.initPloygon = true;
+            }
         },
     },
 };
